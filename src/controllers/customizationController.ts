@@ -1,7 +1,7 @@
 // src/controllers/customizationController.ts
 import { Request, Response, NextFunction } from 'express';
-import { customizationService } from '../services/customizationService.ts';
-import logger from '../utils/logger';
+import { customizationService } from '../services/customizationService.js';
+import logger from '../utils/logger.js';
 
 export const customizationController = {
   // Get all customization options for a menu item

@@ -1,8 +1,8 @@
 // src/middleware/auth.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { env } from '../config/env';
-import logger from '../utils/logger';
+import { env } from '../config/env.js';
+import logger from '../utils/logger.js';
 
 // Extend Express Request type to include user information
 declare global {

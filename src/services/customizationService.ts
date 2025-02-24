@@ -1,6 +1,6 @@
 // src/services/customizationService.ts
-import prisma from '../config/database';
-import logger from '../utils/logger';
+import prisma from '../config/database.js';
+import logger from '../utils/logger.js';
 
 interface CreateCustomizationDto {
   name: string;

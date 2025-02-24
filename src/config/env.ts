@@ -1,9 +1,14 @@
 // src/config/env.ts
 import * as dotenv from 'dotenv';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-// Cargar variables de entorno desde el archivo .env
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+// Primero creamos el equivalente a __dirname para ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Luego usamos estas variables para configurar dotenv
+dotenv.config({ path: join(__dirname, '../../.env') });
 
 export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -15,7 +20,6 @@ export const env = {
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
   JWT_ALGORITHM: process.env.JWT_ALGORITHM || 'HS256',
-  // Añadir más variables de entorno según sea necesario
 };
 
 // Validar variables de entorno requeridas
