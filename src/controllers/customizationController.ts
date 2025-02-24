@@ -1,6 +1,6 @@
 // src/controllers/customizationController.ts
 import { Request, Response, NextFunction } from 'express';
-import { customizationService } from '../services/customizationService';
+import { customizationService } from '../services/customizationService.ts';
 import logger from '../utils/logger';
 
 export const customizationController = {
