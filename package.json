@@ -10,7 +10,7 @@
   "main": "dist/app.js",
    "scripts": {
     "dev": "tsx watch src/app.ts",
-    "build": "tsc && tsc-alias && cp -r src/prisma dist/ && cp package.json dist/",
+    "build": "tsc && tsc-alias && cp -r prisma dist/ && cp package.json dist/",
     "start": "node dist/app.js",
     "postbuild": "cp package.json dist/",
     "prisma:generate": "prisma generate",
