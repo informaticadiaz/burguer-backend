@@ -137,10 +137,10 @@ export const auth = {
 
   // Generate JWT token
   generateToken: (payload: JwtPayload): string => {
-    return jwt.sign(payload, env.JWT_SECRET, {
-      expiresIn: env.JWT_EXPIRES_IN
-    });
-  },
+  return jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: Number(env.JWT_EXPIRES_IN)
+  });
+},
 
   // Refresh token middleware
   refreshToken: (req: Request, res: Response, next: NextFunction) => {
