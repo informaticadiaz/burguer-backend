@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Backend for restaurant menu management system",
+  "license": "MIT",
   "prisma": {
     "schema": "./prisma/schema.prisma"
   },
   "main": "dist/app.js",
-  "scripts": {
+   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "start": "tsx src/app.ts",
-    "build": "tsc",
+    "start": "node --experimental-specifier-resolution=node dist/app.js",
+    "build": "tsc && tsc-alias",
+    "postbuild": "cp package.json dist/",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "test": "jest",
@@ -38,11 +40,15 @@
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "prisma": "^5.10.0",
-    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.8",
     "tsx": "^4.19.3",
     "typescript": "^5.3.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "resolutions": {
+    "glob": "^9.0.0",
+    "rimraf": "^4.0.0"
   }
 }
