@@ -1,7 +1,7 @@
 // src/routes/menuRoutes.ts
 import express from 'express';
-import { menuController } from '../controllers/menuController';
-import { validateMenuItem } from '../middleware/validation';
+import { menuController } from '../controllers/menuController.js';
+import { validateMenuItem } from '../middleware/validation.js';
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 // src/controllers/menuController.ts
 import { Request, Response, NextFunction } from 'express';
-import { menuService } from '../services/menuService';
-import logger from '../utils/logger';
+import { menuService } from '../services/menuService.js';
+import logger from '../utils/logger.js';
 
 export const menuController = {
   // Get all menu items

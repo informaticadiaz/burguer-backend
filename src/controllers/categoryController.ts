@@ -1,7 +1,7 @@
 // src/controllers/categoryController.ts
 import { Request, Response, NextFunction } from 'express';
-import { categoryService } from '../services/categoryService';
-import logger from '../utils/logger';
+import { categoryService } from '../services/categoryService.js';
+import logger from '../utils/logger.js';
 
 export const categoryController = {
   // Get all categories

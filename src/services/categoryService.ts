@@ -1,6 +1,6 @@
 // src/services/categoryService.ts
-import prisma from '../config/database';
-import logger from '../utils/logger';
+import prisma from '../config/database.js';
+import logger from '../utils/logger.js';
 
 interface CreateCategoryDto {
   name: string;

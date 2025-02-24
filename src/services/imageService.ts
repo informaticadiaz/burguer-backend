@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs/promises';
 import sharp from 'sharp';
 import crypto from 'crypto';
-import { env } from '../config/env.js';
 import logger from '../utils/logger.js';
 
 interface ImageUploadResult {

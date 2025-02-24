@@ -1,7 +1,7 @@
 // src/routes/categoryRoutes.ts
 import express from 'express';
-import { categoryController } from '../controllers/categoryController';
-import { validateCategory } from '../middleware/validation';
+import { categoryController } from '../controllers/categoryController.js';
+import { validateCategory } from '../middleware/validation.js';
 
 const router = express.Router();
 

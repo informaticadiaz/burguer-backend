@@ -1,7 +1,7 @@
 // src/routes/customizationRoutes.ts
 import express from 'express';
-import { customizationController } from '../controllers/customizationController';
-import { validateCustomization } from '../middleware/validation';
+import { customizationController } from '../controllers/customizationController.js';
+import { validateCustomization } from '../middleware/validation.js';
 
 const router = express.Router();
 

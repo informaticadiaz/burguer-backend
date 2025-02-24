@@ -1,7 +1,6 @@
 // src/services/menuService.ts
-import prisma from '../config/database';
-import { MenuItem } from '@prisma/client';
-import logger from '../utils/logger';
+import prisma from '../config/database.js';
+import logger from '../utils/logger.js';
 
 interface CreateMenuItemDto {
   name: string;

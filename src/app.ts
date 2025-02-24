@@ -1,12 +1,12 @@
 // src/app.ts
 import express from 'express';
 import cors from 'cors';
-import { env } from './config/env';
-import menuRoutes from './routes/menuRoutes';
-import categoryRoutes from './routes/categoryRoutes';
-import customizationRoutes from './routes/customizationRoutes';
-import { errorHandler, notFoundHandler } from './middleware/errorHandler';
-import logger from './utils/logger';
+import { env } from './config/env.js';
+import menuRoutes from './routes/menuRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import customizationRoutes from './routes/customizationRoutes.js';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import logger from './utils/logger.js';
 
 const app = express();
 
