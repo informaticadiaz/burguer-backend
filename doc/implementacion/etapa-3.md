@@ -2,9 +2,9 @@
 
 ## Introducción
 
-En esta tercera etapa del desarrollo del backend para el sistema de restaurante, nos centraremos en implementar el núcleo del sistema de pedidos. Este componente es crucial ya que representa la funcionalidad central del negocio: la gestión completa del ciclo de vida de los pedidos desde su creación hasta su entrega.
+La Etapa 3 del desarrollo del backend para el sistema de restaurante se centra en la implementación del núcleo del sistema de pedidos. Este componente es crucial ya que representa la funcionalidad central del negocio: la gestión completa del ciclo de vida de los pedidos desde su creación hasta su entrega.
 
-La implementación del sistema de pedidos se basará en la arquitectura modular por dominios ya establecida en las etapas anteriores, manteniendo la separación clara entre las capas de datos, servicios, controladores y API.
+Esta etapa se construirá sobre las bases establecidas en las etapas anteriores (Etapa 1: Fundamentos y Categorías, y Etapa 2: Sistema de Menú y Autenticación), manteniendo la arquitectura modular por dominios y siguiendo los patrones de diseño ya implementados.
 
 ## Objetivos de la Etapa 3
 
@@ -25,257 +25,180 @@ Según el schema de Prisma definido, trabajaremos con los siguientes modelos:
 
 ## Archivos a Desarrollar
 
-Basándonos en la arquitectura modular por dominios, necesitaremos implementar los siguientes archivos:
+La implementación de esta etapa requiere la creación y modificación de los siguientes archivos, organizados según la arquitectura modular por dominios:
 
-### Capa de Tipos/DTOs
+### 1. Definiciones de Tipos
 
-```typescript
-src/types/order.ts
-```
+- `src/types/order.ts`
+  - Enums: OrderStatus, PaymentMethod, PaymentStatus
+  - Interfaces para DTOs de Order, OrderItem, OrderItemCustomization
+  - Tipos para filtros, cálculos y respuestas
 
-Contendrá las interfaces TypeScript para:
+### 2. Servicios
 
-- Tipos de estados de pedido (enum OrderStatus)
-- Tipos de métodos de pago (enum PaymentMethod)
-- DTOs para creación, actualización y respuesta de pedidos
-- DTOs para items de pedido y personalizaciones
+- `src/services/order/orderService.ts`
+  - Métodos CRUD para pedidos
+  - Lógica de transiciones de estado
+  - Cálculo de totales, impuestos y descuentos
+  
+- `src/services/order/orderItemService.ts`
+  - Gestión de ítems dentro de un pedido
+  - Adición, eliminación y actualización de ítems
+  - Cálculo de subtotales por ítem
+  
+- `src/services/order/orderStatusService.ts`
+  - Validación de transiciones de estado
+  - Registro de historial de cambios
+  - Lógica específica por estado
 
-### Capa de Servicios
+### 3. Controladores
 
-```typescript
-src/services/order/orderService.ts
-src/services/order/orderItemService.ts
-src/services/order/orderStatusService.ts
-```
+- `src/controllers/order/orderController.ts`
+  - Endpoints para CRUD de pedidos
+  - Manejo de respuestas y errores específicos
+  
+- `src/controllers/order/orderItemController.ts`
+  - Endpoints para gestión de ítems en pedidos
+  
+- `src/controllers/order/orderStatusController.ts`
+  - Endpoints para cambios de estado
+  - Endpoints para consulta de historial
 
-Encapsularán la lógica de negocio para:
+### 4. Validadores
 
-- Creación, consulta, actualización y cancelación de pedidos
-- Gestión de items dentro de un pedido
-- Transiciones de estado y validaciones correspondientes
-- Cálculo de totales, impuestos y descuentos
+- `src/middleware/validation/orderValidators.ts`
+  - Reglas para validación de datos de pedidos
+  - Validación de transiciones de estado
+  - Validación de items y personalizaciones
 
-### Capa de Controladores
+### 5. Rutas
 
-```typescript
-src/controllers/order/orderController.ts
-src/controllers/order/orderItemController.ts
-src/controllers/order/orderStatusController.ts
-```
+- `src/routes/orderRoutes.ts`
+  - Definición de endpoints
+  - Aplicación de middleware de autenticación y autorización
+  - Integración con validadores
 
-Manejarán las solicitudes HTTP para:
+### 6. Tests
 
-- Endpoints CRUD de pedidos
-- Endpoints para gestionar items dentro de un pedido
-- Endpoints para cambios de estado y seguimiento
+- `tests/unit/services/order/orderService.test.ts`
+- `tests/unit/services/order/orderItemService.test.ts`
+- `tests/unit/services/order/orderStatusService.test.ts`
+- `tests/integration/api/orders.test.ts`
 
-### Capa de Validadores
+### 7. Actualizaciones de Archivos Existentes
 
-```typescript
-src/middleware/validation/orderValidators.ts
-```
-
-Implementará reglas de validación para:
-
-- Creación de pedidos
-- Actualización de pedidos
-- Transiciones de estado válidas
-- Validación de items y personalizaciones
-
-### Capa de Rutas
-
-```typescript
-src/routes/orderRoutes.ts
-```
-
-Definirá los endpoints disponibles y aplicará los middlewares necesarios.
+- `src/app.ts` - Integración de nuevas rutas
+- `prisma/schema.prisma` - Verificación/actualización de modelos de pedidos
 
 ## Plan de Trabajo Detallado
 
-### 1. Definición de Tipos y DTOs (3 días)
+### Fase 1: Preparación y Planificación (2 días)
 
-#### Actividades
+1. **Revisión de Modelos de Datos**
+   - Verificar que los modelos en `schema.prisma` están correctamente definidos
+   - Validar relaciones entre modelos (Order-OrderItem-MenuItem, etc.)
+   - Confirmar tipos de datos y validaciones a nivel de base de datos
 
-- Definir enums para estados de pedido y métodos de pago
-- Crear interfaces para DTO de pedidos
-- Crear interfaces para DTO de items y personalizaciones
-- Definir tipos para cálculos de precios y totales
-- Documentar cada tipo con JSDoc
+2. **Definición de Flujos de Trabajo**
+   - Documentar el ciclo de vida completo de un pedido
+   - Definir todas las transiciones de estado válidas
+   - Establecer reglas de negocio para cálculos y validaciones
 
-#### Entregables
+### Fase 2: Implementación de Tipos y Servicios (7 días)
 
-- Archivo `src/types/order.ts` completo y documentado
+1. **Creación de Tipos y DTOs**
+   - Implementar enums para estados y métodos de pago
+   - Crear interfaces para DTOs de entrada y salida
+   - Definir tipos para filtros y cálculos
 
-### 2. Implementación de Servicios (7 días)
+2. **Implementación de Servicios**
+   - Desarrollar `orderService.ts` con lógica de negocio para pedidos
+   - Implementar `orderItemService.ts` para gestión de ítems
+   - Crear `orderStatusService.ts` para manejo de estados y transiciones
+   - Implementar cálculos de precios, impuestos y descuentos
+   - Desarrollar validaciones a nivel de servicio
 
-***Actividades***
+### Fase 3: Desarrollo de Controladores y API (5 días)
 
-***Order Service (4 días)***
+1. **Implementación de Controladores**
+   - Desarrollar `orderController.ts` para endpoints principales
+   - Implementar `orderItemController.ts` para gestión de ítems
+   - Crear `orderStatusController.ts` para cambios de estado
+   - Manejar respuestas y errores específicos
 
-- Implementar método de creación de pedidos
-- Implementar consulta de pedidos con filtros
-- Implementar actualización de datos básicos
-- Implementar lógica de cálculo de totales
-- Implementar sistema de cancelación
+2. **Implementación de Validadores**
+   - Crear reglas de validación para datos de entrada
+   - Implementar validación de transiciones de estado
+   - Desarrollar validaciones para dirección, pago, etc.
 
-***Order Item Service (2 días)***
+3. **Configuración de Rutas**
+   - Definir todos los endpoints del sistema de pedidos
+   - Aplicar middleware de autenticación y autorización
+   - Integrar validadores en las rutas
 
-- Implementar gestión de items dentro de un pedido
-- Implementar lógica para añadir/eliminar items
-- Implementar actualización de cantidades
+### Fase 4: Pruebas y Documentación (5 días)
 
-***Order Status Service (1 día)***
+1. **Desarrollo de Tests Unitarios**
+   - Crear tests para servicios
+   - Probar casos de éxito y error
+   - Validar cálculos y transiciones de estado
 
-- Implementar sistema de transiciones de estado
-- Implementar validación de cambios de estado permitidos
-- Implementar registro de historial de cambios
+2. **Desarrollo de Tests de Integración**
+   - Probar el flujo completo de pedidos
+   - Verificar endpoints y respuestas
+   - Validar autenticación y autorización
 
-***Entregables***
+3. **Documentación**
+   - Actualizar documentación de API
+   - Documentar flujos de trabajo y estados
+   - Crear guía de uso del sistema de pedidos
 
-- Servicios implementados con tests unitarios
-- Documentación de funciones y lógica de negocio
+### Fase 5: Integración y Revisión (4 días)
 
-### 3. Implementación de Controladores (5 días)
+1. **Integración con Módulos Existentes**
+   - Asegurar correcto funcionamiento con sistema de menú
+   - Verificar integración con autenticación
+   - Pruebas de integración completa
 
-***Actividades***
+2. **Refinamiento y Optimización**
+   - Revisión de código y optimizaciones
+   - Mejora de consultas y rendimiento
+   - Revisión de seguridad
 
-***Order Controller (3 días)***
-
-- Implementar endpoint para creación de pedidos
-- Implementar endpoints de consulta (listado, detalle)
-- Implementar endpoint de actualización
-- Implementar endpoint de cancelación
-
-***Order Item Controller (1 día)***
-
-- Implementar endpoints para gestión de items
-- Implementar manejo de errores específicos
-
-***Order Status Controller (1 día)***
-
-- Implementar endpoint para cambio de estado
-- Implementar endpoint para consulta de historial
-
-***Entregables***
-
-- Controladores implementados con manejo de errores
-- Documentación de endpoints y respuestas
-
-### 4. Implementación de Validadores (2 días)
-
-***Actividades***
-
-- Desarrollar reglas de validación para creación de pedidos
-- Implementar validación de transiciones de estado
-- Implementar validación de datos de pago
-- Implementar validación de direcciones de entrega
-
-***Entregables***
-
-- Middleware de validación implementado
-- Tests para escenarios de validación
-
-### 5. Implementación de Rutas (1 día)
-
-***Actividades***
-
-- Definir rutas para todos los endpoints de pedidos
-- Aplicar middleware de autenticación y autorización
-- Aplicar validadores a las rutas correspondientes
-- Integrar en el sistema de rutas principal
-
-***Entregables***
-
-- Archivo de rutas implementado
-- Documentación de endpoints disponibles
-
-### 6. Pruebas de Integración (3 días)
-
-***Actividades***
-
-- Desarrollar pruebas para el flujo completo de pedidos
-- Probar escenarios de cálculo de precios
-- Probar transiciones de estado válidas e inválidas
-- Probar consultas filtradas y ordenadas
-
-***Entregables***
-
-- Suite de pruebas de integración
-- Documentación de casos de prueba
-
-### 7. Documentación y Finalización (2 días)
-
-***Actividades***
-
-- Completar documentación de API
-- Documentar flujos de trabajo y estados
-- Actualizar README con información del nuevo módulo
-- Revisar y refinar implementación
-
-***Entregables***
-
-- Documentación actualizada
-- Pull request listo para revisión
+3. **Preparación para Despliegue**
+   - Actualización de migraciones
+   - Verificación de configuración
+   - Pruebas finales
 
 ## Estructura de Endpoints a Implementar
 
 ### Pedidos
 
 - `GET /api/orders` - Listar pedidos con filtros
-  - Query params: status, dateFrom, dateTo, customerId, etc.
-  - Respuesta paginada
-
 - `GET /api/orders/:id` - Obtener detalles de un pedido específico
-  - Incluye items, personalizaciones, historial de estados
-
 - `POST /api/orders` - Crear un nuevo pedido
-  - Requiere autenticación
-  - Valida productos, dirección, método de pago
-
 - `PUT /api/orders/:id` - Actualizar datos de un pedido
-  - Limitado a campos específicos según el estado
-  - Requiere autenticación y autorización
-
 - `POST /api/orders/:id/status` - Cambiar el estado de un pedido
-  - Valida transiciones permitidas
-  - Registra en historial
-  - Requiere autorización según el nuevo estado
-
 - `DELETE /api/orders/:id` - Cancelar un pedido
-  - Solo permitido en ciertos estados
-  - Registro de motivo de cancelación
-  - Requiere autorización
 
 ### Items de Pedido
 
 - `POST /api/orders/:id/items` - Añadir item a un pedido existente
-  - Solo disponible en ciertos estados
-  - Recalcula totales
-
 - `PUT /api/orders/:id/items/:itemId` - Actualizar un item
-  - Actualización de cantidad o personalizaciones
-  - Recalcula totales
-
 - `DELETE /api/orders/:id/items/:itemId` - Eliminar un item
-  - Solo disponible en ciertos estados
-  - Recalcula totales
 
 ### Historial de Estados
 
 - `GET /api/orders/:id/history` - Ver historial de cambios de estado
-  - Incluye timestamps y usuario que realizó el cambio
 
 ## Reglas de Negocio Importantes
 
 ### Estados de Pedido
 
-Implementar las transiciones permitidas según este diagrama:
+El sistema implementará las siguientes transiciones de estado:
 
-```typescript
-PENDING → CONFIRMED → PREPARING → READY → ASSIGNED → IN_TRANSIT → DELIVERED
-    ↓                    ↓           ↓        ↓           ↓            ↓
-CANCELLED            CANCELLED    CANCELLED  CANCELLED  CANCELLED   CANCELLED
-```
+- PENDING → CONFIRMED → PREPARING → READY → ASSIGNED → IN_TRANSIT → DELIVERED
+- Cualquier estado puede transicionar a CANCELLED con las validaciones adecuadas
 
 ### Cálculos de Precios
 
@@ -293,75 +216,67 @@ CANCELLED            CANCELLED    CANCELLED  CANCELLED  CANCELLED   CANCELLED
 - Solo usuarios autorizados pueden cambiar ciertos estados
 - Ciertas transiciones de estado requieren datos adicionales
 
-## Integración con Otros Módulos
-
-### Integración con Sistema de Menú (ya implementado)
-
-- Validación de productos existentes y disponibles
-- Verificación de precios actuales
-- Obtención de información de categoría y personalización
-
-### Preparación para Integración con Sistema de Clientes (próxima etapa)
-
-- Estructura para asociar pedidos a clientes
-- Campos para gestionar direcciones de entrega
-
-### Preparación para Integración con Sistema de Entregas (próxima etapa)
-
-- Estados relacionados con la asignación y seguimiento
-- Campos para asociar repartidores
-
 ## Consideraciones Técnicas
 
 ### Transacciones de Base de Datos
 
-- Usar transacciones para operaciones que afecten múltiples tablas
-- Ejemplo: crear pedido con sus items y personalizaciones
+- Implementar transacciones para operaciones que afecten múltiples tablas
+- Garantizar consistencia en la creación y actualización de pedidos
 
 ### Optimización de Consultas
 
-- Crear índices adecuados en tabla de pedidos (por estado, cliente, fechas)
-- Implementar paginación eficiente para listados
+- Crear índices adecuados en la tabla de pedidos
+- Implementar filtrado y paginación eficiente
 
-### Concurrencia
+### Seguridad
 
-- Manejar posibles condiciones de carrera en cambios de estado
-- Implementar bloqueos optimistas para actualizaciones
+- Validar permisos según roles (ADMIN, MANAGER, STAFF, etc.)
+- Implementar reglas de negocio para acceso a pedidos
 
-## Estimación de Tiempos
+### Manejo de Errores
 
-| Tarea | Días Estimados |
-|-------|----------------|
-| Definición de Tipos y DTOs | 3 |
-| Implementación de Servicios | 7 |
-| Implementación de Controladores | 5 |
-| Implementación de Validadores | 2 |
-| Implementación de Rutas | 1 |
-| Pruebas de Integración | 3 |
-| Documentación y Finalización | 2 |
+- Implementar errores específicos del dominio
+- Proporcionar mensajes descriptivos para facilitar depuración
+
+## Estimación de Tiempo
+
+| Fase | Duración Estimada |
+|------|-------------------|
+| Preparación y Planificación | 2 días |
+| Implementación de Tipos y Servicios | 7 días |
+| Desarrollo de Controladores y API | 5 días |
+| Pruebas y Documentación | 5 días |
+| Integración y Revisión | 4 días |
 | **Total** | **23 días hábiles** |
 
 ## Criterios de Aceptación
 
-- Todos los endpoints implementados y documentados
-- Pruebas unitarias para servicios con cobertura >80%
-- Pruebas de integración para flujos principales
-- Validación correcta de transiciones de estado
-- Cálculo preciso de totales, impuestos y descuentos
-- Manejo adecuado de errores con mensajes descriptivos
-- Integración correcta con el sistema de menú existente
+1. Todos los endpoints implementados y funcionando correctamente
+2. Transiciones de estado funcionando según reglas de negocio
+3. Cálculos de precios, impuestos y descuentos precisos
+4. Tests unitarios y de integración pasando con >80% de cobertura
+5. Documentación completa y actualizada
+6. Integración correcta con módulos existentes
+7. Rendimiento adecuado en consultas con volumen de datos realista
 
 ## Riesgos y Mitigación
 
-| Riesgo | Impacto | Probabilidad | Mitigación |
-|--------|---------|--------------|------------|
-| Complejidad en el cálculo de precios | Alto | Media | Desarrollar tests específicos para diversos escenarios |
-| Inconsistencias en transiciones de estado | Alto | Media | Implementar máquina de estados formal con validaciones estrictas |
-| Rendimiento en consultas complejas | Medio | Baja | Diseñar índices adecuados desde el inicio |
-| Integridad referencial con otros módulos | Medio | Media | Usar transacciones y validaciones a nivel de servicio |
+1. **Complejidad en cálculos de precios**
+   - Mitigación: Implementar tests exhaustivos para diversos escenarios
+
+2. **Inconsistencias en transiciones de estado**
+   - Mitigación: Utilizar máquina de estados formal con validaciones estrictas
+
+3. **Rendimiento en consultas complejas**
+   - Mitigación: Diseñar índices adecuados y optimizar consultas desde el inicio
+
+4. **Integridad referencial con otros módulos**
+   - Mitigación: Implementar transacciones y validaciones completas
 
 ## Conclusión
 
-La implementación del sistema de pedidos representa un hito crucial en el desarrollo del backend del restaurante. Este módulo constituye el núcleo funcional del negocio y sentará las bases para las próximas etapas de desarrollo.
+La implementación del sistema de pedidos representa una etapa crucial en el desarrollo del backend del restaurante. Este módulo constituye el núcleo funcional del negocio y sentará las bases para las próximas etapas como el sistema de clientes y el sistema de entregas.
 
-Al finalizar esta etapa, el sistema será capaz de gestionar el ciclo de vida completo de los pedidos, desde su creación hasta su entrega, con todas las validaciones y cálculos necesarios. La arquitectura modular por dominios nos permitirá evolucionar y extender esta funcionalidad en etapas posteriores.
+La arquitectura modular por dominios ya establecida facilitará la implementación progresiva y la evolución del sistema, permitiendo la integración fluida de nuevas funcionalidades en el futuro.
+
+Una vez completada esta etapa, el sistema podrá gestionar el ciclo de vida completo de los pedidos, desde su creación hasta su entrega, con todas las validaciones y cálculos necesarios para el funcionamiento correcto de un sistema de restaurante con delivery.
